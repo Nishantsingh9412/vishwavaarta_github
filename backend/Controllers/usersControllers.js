@@ -5,7 +5,7 @@ import User from '../models/UserModel.js';
 
 export const registerUser = async (req, res) => {
     try {
-        const { name, email, password, pic } = req.body;
+        const { name, email, password, preferredLanguage , pic } = req.body;
 
         if (!name || !email || !password) {
             res.status(400).json({ message: "Please fill all the fields" })
@@ -18,12 +18,12 @@ export const registerUser = async (req, res) => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 12);
-        const user = await User.create({ name, email, password: hashedPassword, pic });
+        const user = await User.create({ name, email, password: hashedPassword, pic , preferredLanguage });
 
         const jwtoken = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" })
 
         if (user) {
-            const existingUser = { _id: user._id, name: user.name, email: user.email, pic: user.pic }
+            const existingUser = { _id: user._id, name: user.name, email: user.email, pic: user.pic , preferredLanguage: user.preferredLanguage}
             res.status(201).json({ existingUser, token:jwtoken })
             // res.status(201).json({ _id: user._id, name: user.name, email: user.email, pic: user.pic, token: jwtoken })
         } else {

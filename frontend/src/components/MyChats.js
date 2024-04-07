@@ -19,9 +19,7 @@ const Mychats = ({ fetchAgain }) => {
   console.log(loggedUser)
 
   var userImage;
-
-
-
+  
   const fetchChats = async () => {
     // console.log(user._id);
     try {

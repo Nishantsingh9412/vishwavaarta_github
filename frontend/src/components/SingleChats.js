@@ -4,6 +4,7 @@ import {
     FormControl,
     IconButton,
     Input,
+    Stack,
     InputGroup,
     Spinner,
     Text,
@@ -11,6 +12,7 @@ import {
     cookieStorageManager,
     useToast
 } from '@chakra-ui/react';
+import { FaLanguage } from "react-icons/fa";
 import { IoMdSend } from 'react-icons/io';
 import axios from 'axios';
 import { ArrowBackIcon } from '@chakra-ui/icons';
@@ -34,6 +36,7 @@ var socket, selectedChatCompare;
 const SingleChats = ({ fetchAgain, setFetchAgain }) => {
     const { user, userToken, selectedChat, setSelectedChat, notification, setNotification } = ChatState();
 
+    const [showTranslatedText, setShowTranslatedText] = useState(false);
     const [message, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
     const [newMessage, setNewMessage] = useState();
@@ -198,11 +201,32 @@ const SingleChats = ({ fetchAgain, setFetchAgain }) => {
                         {!selectedChat.isGroupChat ? (
                             <>
                                 {/* {console.log(198,user)} */}
-                                {getSender(user, selectedChat.users)}
+                                <Stack flexDir={'row'} fontFamily="Work sans">
+                                    <>
+                                        {getSender(user, selectedChat.users)}
+                                        <IconButton
+                                            padding={'5px'}
+                                            icon={<FaLanguage />}
+                                            size={'1x'}
+                                            onClick={() => setShowTranslatedText(!showTranslatedText)}
+                                        />
+                                    </>
+                                </Stack>
                                 <ProfileModal user={getSenderFull(user, selectedChat.users)} />
                             </>
                         ) : (
-                            <> {selectedChat.chatName.toUpperCase()}
+                            <>
+                                <Stack flexDir={'row'} fontFamily="Work sans">
+                                    <>
+                                        {selectedChat.chatName.toUpperCase()}
+                                        <IconButton
+                                            padding={'5px'}
+                                            icon={<FaLanguage />}
+                                            size={'1x'}
+                                            onClick={() => setShowTranslatedText(!showTranslatedText)}
+                                        />
+                                    </>
+                                </Stack>
                                 <UpdateGroupChatModal
                                     fetchAgain={fetchAgain}
                                     setFetchAgain={setFetchAgain}
@@ -235,6 +259,7 @@ const SingleChats = ({ fetchAgain, setFetchAgain }) => {
                         ) : (
                             <div className={CSS.messages}>
                                 <ScrollableChat
+                                    showTranslated={showTranslatedText}
                                     messages={message}
                                 />
                             </div>
@@ -261,8 +286,8 @@ const SingleChats = ({ fetchAgain, setFetchAgain }) => {
                                     placeholder='Type a message .......'
                                     onChange={typingHandler}
                                 />
-                                <Box style={{margin:'6px',cursor:'pointer'}} onClick={handleSendMessage}>
-                                    <IoMdSend size={'30'}  /> 
+                                <Box style={{ margin: '6px', cursor: 'pointer' }} onClick={handleSendMessage}>
+                                    <IoMdSend size={'30'} />
                                 </Box>
                             </InputGroup>
                         </FormControl>

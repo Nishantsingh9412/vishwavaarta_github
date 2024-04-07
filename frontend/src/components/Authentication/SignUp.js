@@ -1,5 +1,7 @@
 import { FormControl, FormLabel, Input, InputGroup, InputRightElement, VStack, Button, useToast } from '@chakra-ui/react'
 import React, { useState } from 'react'
+import Select from 'react-select'
+import languages from '../dataLanguages/languages'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
@@ -17,6 +19,7 @@ import VishwaLogo from '../assets/images/logo_vishwa.png'
 
 const SignUp = () => {
     const navigate = useNavigate();
+    const [preferredLanguage, setPreferredLanguage] = useState('')
     const [show, setShow] = useState(false)
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
@@ -73,6 +76,8 @@ const SignUp = () => {
         }
     }
 
+    console.log(preferredLanguage);
+
     const submitHandler = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -105,7 +110,11 @@ const SignUp = () => {
                     "Content-Type": "application/json"
                 },
             }
-            const { data } = await axios.post('/api/user/register', { name, email, password, pic }, config);
+            const { data } = await axios
+                .post('/api/user/register',
+                    { name, email, password, pic, preferredLanguage },
+                    config
+                );
             toast({
                 title: "Registered Successfully",
                 status: 'success',
@@ -116,9 +125,7 @@ const SignUp = () => {
 
             localStorage.setItem('userInfo', JSON.stringify(data));
             setLoading(false);
-
             navigate('/chats');
-
         } catch (err) {
             toast({
                 title: "Something Went Wrong",
@@ -216,10 +223,6 @@ const SignUp = () => {
         //         isLoading={loading}
         //     >Submit</Button>
         // </VStack>
-
-
-
-
         <VStack spacing={'5px'}>
             <div
                 className="signup"
@@ -358,7 +361,7 @@ const SignUp = () => {
                                         <FormLabel >Password</FormLabel>
                                         <InputGroup >
                                             <Input
-                                                type={show ? "text" : "password" }
+                                                type={show ? "text" : "password"}
                                                 placeholder='Enter Your Password'
                                                 onChange={(e) => setPassword(e.target.value)}
                                             >
@@ -377,7 +380,7 @@ const SignUp = () => {
                                         <FormLabel > Confirm Password</FormLabel>
                                         <InputGroup >
                                             <Input
-                                                type={show ? "text" : "password" }
+                                                type={show ? "text" : "password"}
                                                 placeholder='Enter Your Password'
                                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                             >
@@ -396,6 +399,20 @@ const SignUp = () => {
                                     <FormControl>
                                         <FormLabel>Profile Picture</FormLabel>
                                         <Input type='file' p={1.5} accept='image/*' onChange={(e) => postDetails(e.target.files[0])} />
+                                    </FormControl>
+
+
+                                    <FormControl >
+                                        <FormLabel> Select Langauge for Translation </FormLabel>
+                                        <Select
+                                            options={languages}
+                                            placeholder='English'
+                                            // isMulti
+                                            onChange={(e) => setPreferredLanguage(e.code)}
+                                        // onChange={(selectedOptions) =>
+                                        // setPreferredLanguage(selectedOptions.map((option) => option.value))
+                                        // }
+                                        />
                                     </FormControl>
 
                                     {/* <Button

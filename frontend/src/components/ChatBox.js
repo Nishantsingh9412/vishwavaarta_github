@@ -22,7 +22,6 @@ const ChatBox = ({fetchAgain,setFetchAgain}) => {
       borderWidth="1px"
       >
       <SingleChats
-
         fetchAgain = {fetchAgain}
         setFetchAgain = {setFetchAgain}
       />

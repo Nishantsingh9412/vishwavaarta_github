@@ -11,4 +11,5 @@ router.get('/:chatId',protect,allMessages)
 
 
 
+
 export default router;
