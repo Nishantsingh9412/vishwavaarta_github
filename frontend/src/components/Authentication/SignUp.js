@@ -25,7 +25,7 @@ const SignUp = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-    const [pic, setPic] = useState('')
+    const [pic, setPic] = useState(undefined)
     const [loading, setLoading] = useState(false)
     const toast = useToast();
 

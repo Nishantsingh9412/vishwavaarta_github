@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios';
 import { Button } from '@chakra-ui/react';
 import ScrollableFeed from 'react-scrollable-feed'
 import { isLastMessage, isSameSender, isSameSenderMargin, isSameUser } from './Config/ChatsLogic'
@@ -6,9 +7,44 @@ import { Avatar, Tooltip } from '@chakra-ui/react';
 import { ChatState } from '../Context/ChatProvider';
 
 
-const ScrollableChat = ({ messages ,showTranslated }) => {
-
+const ScrollableChat = ({ messages, showTranslated }) => {
     const { user } = ChatState();
+    const [translatedMessages, setTranslatedMessages] = useState(messages);
+
+    useEffect(() => {
+        const translateMessages = async () => {
+            const promises = messages.map(async (message) => {
+                if (!message.translatedContent) {
+                    const encodedParams = new URLSearchParams();
+                    encodedParams.set('texte', message.content);
+                    encodedParams.set('to_lang', user.preferredLanguage);
+
+                    const options = {
+                        method: 'POST',
+                        url: 'https://free-google-translation.p.rapidapi.com/translate',
+                        headers: {
+                            'content-type': 'application/x-www-form-urlencoded',
+                            'X-RapidAPI-Key': process.env.REACT_APP_TRANSLATE_API_KEY,
+                            'X-RapidAPI-Host': 'free-google-translation.p.rapidapi.com'
+                        },
+                        data: encodedParams,
+                    };
+
+                    try {
+                        const response = await axios.request(options);
+                        message.translatedContent = response.data.translation_data.translation;
+                    } catch (error) {
+                        console.error("Translation failed for message id: ", message._id);
+                    }
+                }
+                return message;
+            });
+            const newMessages = await Promise.all(promises);
+            setTranslatedMessages(newMessages);
+        };
+
+        translateMessages();
+    }, [messages]);
 
     return (
         <ScrollableFeed>

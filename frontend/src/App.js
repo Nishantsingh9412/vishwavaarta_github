@@ -15,7 +15,7 @@ function App() {
         <Route path='/' element={<HomePage />} exact   />
         <Route path='/landing' element={<Landing />}   />
         <Route path='/chats' element={<ChatPage />}  />
-        <Route path='/newSignup' element={<NewSignup />}  />
+        {/* <Route path='/newSignup' element={<NewSignup />}  /> */}
 
       </Routes>
       {/* <Button colorScheme='blue'>Button</Button> */}

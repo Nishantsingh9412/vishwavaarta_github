@@ -126,7 +126,7 @@ const Mychats = ({ fetchAgain }) => {
                     borderRadius="full"
                     boxSize="50px"
                     // src={chat.isGroupChat ? 'https://via.placeholder.com/50' : chat?.users?.filter((SingleUser) => SingleUser._id !== loggedUser.existingUser._id)?.pic}
-                    src={chat.isGroupChat ? 'https://via.placeholder.com/50' : chat?.users?.find(user => user._id !== loggedUser.existingUser._id)?.pic}
+                    src={chat.isGroupChat ? 'https://via.placeholder.com/50' : chat?.users?.find(user => user._id !== loggedUser?.existingUser?._id)?.pic}
                     alt="Profile Image"
                   />
                   <Box ml={3}>
@@ -135,7 +135,6 @@ const Mychats = ({ fetchAgain }) => {
                       ? getSender(loggedUser, chat.users)
                       : chat.chatName}
                   </Text> */}
-
                     <Text fontWeight="bold" style={{marginBottom:'4px'}}>
                       {!chat.isGroupChat
                         ? null
@@ -144,7 +143,7 @@ const Mychats = ({ fetchAgain }) => {
                     {chat.latestMessage && (
                       <Box>
                         <Text fontSize="sm">
-                          <b>{chat.users.find(user => user._id !== loggedUser.existingUser._id)?.name} : </b>
+                          <b>{chat.users.find(user => user?._id !== loggedUser?.existingUser?._id)?.name} : </b>
                           {chat.latestMessage.content.length > 50
                             ? chat.latestMessage.content.substring(0, 40) + "..."
                             : chat.latestMessage.content}
