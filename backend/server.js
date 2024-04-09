@@ -74,7 +74,7 @@ const server = app.listen(PORT , console.log(`App started on Port : ${PORT}`))
 const io = new Server(server, {
     pingTimeOut: 60000,   // 60 sec
     cors:{
-        origin:'http://localhost:3000'
+        origin:process.env.ORIGIN_URL || 'http://localhost:3000',
     }
 })
 

@@ -13,8 +13,8 @@ function App() {
       <Routes>
 
         <Route path='/' element={<HomePage />} exact   />
-        <Route path='/landing' element={<Landing />}   />
         <Route path='/chats' element={<ChatPage />}  />
+        <Route path='/landing' element={<Landing />}   />
         {/* <Route path='/newSignup' element={<NewSignup />}  /> */}
 
       </Routes>

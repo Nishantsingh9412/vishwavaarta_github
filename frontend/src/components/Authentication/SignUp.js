@@ -406,7 +406,7 @@ const SignUp = () => {
                                         <FormLabel> Select Langauge for Translation </FormLabel>
                                         <Select
                                             options={languages}
-                                            placeholder='English'
+                                            // placeholder='English'
                                             // isMulti
                                             onChange={(e) => setPreferredLanguage(e.code)}
                                         // onChange={(selectedOptions) =>
