@@ -8,7 +8,7 @@ import chatRoutes from './Routes/chatRoutes.js'
 import messageRoutes from './Routes/messageRoutes.js'
 import { Server } from 'socket.io';
 
-import {notFound , errorHandler} from './middleware/errorMiddleware.js'
+import { notFound, errorHandler } from './middleware/errorMiddleware.js'
 // const path = require('path');
 import path from 'path'
 
@@ -27,9 +27,19 @@ ConnectDB();
 
 
 
-app.use('/api/user',userRoutes)
-app.use('/api/chat',chatRoutes)
-app.use('/api/messages',messageRoutes)
+app.use('/api/user', userRoutes)
+app.use('/api/chat', chatRoutes)
+app.use('/api/messages', messageRoutes)
+
+console.log("Pokemon")
+console.log("Pokemon")
+console.log("Pokemon")
+console.log("Pokemon")
+console.log("Pokemon")
+console.log("Pokemon")
+console.log("Pokemon")
+console.log("Pokemon")
+console.log("Pokemon")
 
 // ----------------------------deployment--------------------------------------
 
@@ -37,16 +47,16 @@ app.use('/api/messages',messageRoutes)
 const __dirname1 = path.resolve();
 
 
-if(process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname1, "./frontend/build")));
 
-    app.get('*', (req,res) => {
+    app.get('*', (req, res) => {
         res.sendFile(path.resolve(__dirname1, "./frontend", "build", "index.html"));
     });
 } else {
-    app.get('/',(req,res) => {
-    res.send("on 5000 port ")
-})
+    app.get('/', (req, res) => {
+        res.send("on 5000 port  ")
+    })
 }
 
 // ----------------------------deployment--------------------------------------
@@ -54,7 +64,7 @@ if(process.env.NODE_ENV === 'production') {
 
 
 
-                // -------- ------ Error Handling ----------------------------
+// -------- ------ Error Handling ----------------------------
 app.use(notFound)
 app.use(errorHandler)
 
@@ -69,53 +79,55 @@ app.use(errorHandler)
 
 // })
 
-const PORT = process.env.PORT ||  5000
-const server = app.listen(PORT , console.log(`App started on Port : ${PORT}`))
+const PORT = process.env.PORT || 5000
+const server = app.listen(PORT, console.log(`App started on Port : ${PORT}`))
 const io = new Server(server, {
     pingTimeOut: 60000,   // 60 sec
-    cors:{
-        origin: [process.env.ORIGIN_URL || 'http://localhost:3000', 'https://vishwavaarta-github.onrender.com'],
+    cors: {
+        // origin: [process.env.ORIGIN_URL || 'http://localhost:3000', 'https://vishwavaarta-github.onrender.com'],
+        // origin: 'http://localhost:3000',
+        origin: '*'
     }
 })
 
 io.on('connection', (socket) => {
     console.log('connected to socket.io')
 
-    socket.on('setup',(userData) => {
+    socket.on('setup', (userData) => {
         socket.join(userData?._id)
         // console.log('user joined : ',userData._id)
         socket.emit('connected');
     })
 
-    socket.on('join chat',(room) => {
+    socket.on('join chat', (room) => {
         socket.join(room);
-        console.log('joined room : ',room)
+        console.log('joined room : ', room)
     })
 
-    socket.on('typing',(room) => {
+    socket.on('typing', (room) => {
         socket.in(room).emit('typing')
     })
 
-    socket.on('stop typing',(room) => {
+    socket.on('stop typing', (room) => {
         socket.in(room).emit('stop typing')
     })
 
-    socket.on('new message', (newMessageRecieved)=> {
+    socket.on('new message', (newMessageRecieved) => {
         var chat = newMessageRecieved.chat;
 
-        if(!chat.users)
+        if (!chat.users)
             return console.log('chat.users not defined');
-        
+
         chat.users.forEach(user => {
-            if(user?._id == newMessageRecieved.sender?._id)
+            if (user?._id == newMessageRecieved.sender?._id)
                 return;
-            socket.in(user?._id).emit('message recieved',newMessageRecieved)
+            socket.in(user?._id).emit('message recieved', newMessageRecieved)
         })
 
     })
 
-    socket.off('setup',() => {
+    socket.off('setup', () => {
         console.log('disconnected from socket.io')
         socket.leave(userData?._id)
-    })  
+    })
 })

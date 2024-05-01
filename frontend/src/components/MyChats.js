@@ -9,7 +9,7 @@ import { getSender } from './Config/ChatsLogic';
 import GroupChatModal from './miscellaneous/GroupChatModal';
 
 const Mychats = ({ fetchAgain }) => {
-
+  
   const [chatImgUser, setChatImgUser] = useState('');
   const [loggedUser, setLoggedUser] = useState();
   const { userToken, selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
@@ -44,7 +44,6 @@ const Mychats = ({ fetchAgain }) => {
       // userImage = data?.user?.filter((user) => user._id !== loggedUser._id).map((user) => user.pic);
       // console.log(45, "THisis i ss userImg \n", userImage);
       // console.log("THisis i ss user \n" , user);
-
     } catch (error) {
       console.log(error)
       toast({

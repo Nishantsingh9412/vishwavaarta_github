@@ -10,6 +10,13 @@ import { ChatState } from '../Context/ChatProvider';
 const ScrollableChat = ({ messages, showTranslated }) => {
     const { user } = ChatState();
     const [translatedMessages, setTranslatedMessages] = useState(messages);
+    
+    const localLangugae = JSON.parse(localStorage.getItem('userInfo'));
+    const preferredLanguageLocal = localLangugae?.existingUser?.preferredLanguage;
+    
+    for (let index = 0; index < 10; index++) {
+        console.log(preferredLanguageLocal);
+    }
 
     useEffect(() => {
         const translateMessages = async () => {
@@ -17,7 +24,8 @@ const ScrollableChat = ({ messages, showTranslated }) => {
                 if (!message.translatedContent) {
                     const encodedParams = new URLSearchParams();
                     encodedParams.set('texte', message.content);
-                    encodedParams.set('to_lang', user.preferredLanguage);
+                    // encodedParams.set('to_lang', user.preferredLanguage);
+                    encodedParams.set('to_lang', preferredLanguageLocal);
 
                     const options = {
                         method: 'POST',
@@ -44,7 +52,7 @@ const ScrollableChat = ({ messages, showTranslated }) => {
         };
 
         translateMessages();
-    }, [messages]);
+    }, [messages,preferredLanguageLocal]);
 
     return (
         <ScrollableFeed>

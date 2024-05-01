@@ -12,6 +12,8 @@ import {
     cookieStorageManager,
     useToast
 } from '@chakra-ui/react';
+import { RiUserVoiceFill } from "react-icons/ri";
+import { MdKeyboardVoice } from "react-icons/md";
 import { FaLanguage } from "react-icons/fa";
 import { IoMdSend } from 'react-icons/io';
 import axios from 'axios';
@@ -28,14 +30,15 @@ import ScrollableChat from './ScrollableChat';
 import animationData from './assets/animate/typing.json'
 
 
-const ENDPOINT = "http://localhost:5000";
+// const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = process.env.REACT_APP_ENDPOINT;
 var socket, selectedChatCompare;
 
 
 
 const SingleChats = ({ fetchAgain, setFetchAgain }) => {
     const { user, userToken, selectedChat, setSelectedChat, notification, setNotification } = ChatState();
-
+    const [isListening, setIsListening] = useState(false);
     const [showTranslatedText, setShowTranslatedText] = useState(false);
     const [message, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -52,6 +55,32 @@ const SingleChats = ({ fetchAgain, setFetchAgain }) => {
         rendererSettings: {
             preserveAspectRatio: "xMidYMid slice",
         },
+    };
+
+    const handleSpeechToText = () => {
+        if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+
+            recognition.onstart = function () {
+                console.log('Voice recognition started. Try speaking into the microphone.');
+                setIsListening(true);
+            };
+
+            recognition.onend = function () {
+                console.log('Voice recognition ended.');
+                setIsListening(false);
+            };
+
+            recognition.onresult = function (event) {
+                const transcript = event.results[0][0].transcript;
+                setNewMessage(transcript); // assuming setNewMessage is your state setter for the message input
+            };
+
+            recognition.start();
+        } else {
+            console.log('Your browser does not support speech recognition.');
+        }
     };
 
     // useEffect(() => {
@@ -286,6 +315,10 @@ const SingleChats = ({ fetchAgain, setFetchAgain }) => {
                                     placeholder='Type a message .......'
                                     onChange={typingHandler}
                                 />
+
+                                <Box style={{ margin: '6px', cursor: 'pointer' }} onClick={handleSpeechToText}>
+                                    {isListening ? <RiUserVoiceFill size={'20'} style={{marginTop:'4px'}} /> : <MdKeyboardVoice size={'30'} />}
+                                </Box>
                                 <Box style={{ margin: '6px', cursor: 'pointer' }} onClick={handleSendMessage}>
                                     <IoMdSend size={'30'} />
                                 </Box>
