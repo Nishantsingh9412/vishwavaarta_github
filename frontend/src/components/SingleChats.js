@@ -12,6 +12,8 @@ import {
     cookieStorageManager,
     useToast
 } from '@chakra-ui/react';
+import EmojiPicker from 'emoji-picker-react';
+
 import { RiUserVoiceFill } from "react-icons/ri";
 import { MdKeyboardVoice } from "react-icons/md";
 import { FaLanguage } from "react-icons/fa";
@@ -38,6 +40,8 @@ var socket, selectedChatCompare;
 
 const SingleChats = ({ fetchAgain, setFetchAgain }) => {
     const { user, userToken, selectedChat, setSelectedChat, notification, setNotification } = ChatState();
+    // const [emoji, setEmoji] = useState('')
+    // const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [isListening, setIsListening] = useState(false);
     const [showTranslatedText, setShowTranslatedText] = useState(false);
     const [message, setMessages] = useState([]);
@@ -56,6 +60,13 @@ const SingleChats = ({ fetchAgain, setFetchAgain }) => {
             preserveAspectRatio: "xMidYMid slice",
         },
     };
+
+
+
+    // const handleEmojiClick = (event, emojiObject) => {
+    //     setNewMessage(newMessage + emojiObject.emoji);
+    //     setShowEmojiPicker(false);
+    // };
 
     const handleSpeechToText = () => {
         if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
@@ -316,8 +327,15 @@ const SingleChats = ({ fetchAgain, setFetchAgain }) => {
                                     onChange={typingHandler}
                                 />
 
+{/* 
+                                <Box style={{ margin: '6px', cursor: 'pointer' }} onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
+                                    {showEmojiPicker ? 'Close' : 'Emojis'}
+                                </Box>
+                                {showEmojiPicker && (
+                                    <EmojiPicker onEmojiClick={handleEmojiClick} />
+                                )} */}
                                 <Box style={{ margin: '6px', cursor: 'pointer' }} onClick={handleSpeechToText}>
-                                    {isListening ? <RiUserVoiceFill size={'20'} style={{marginTop:'4px'}} /> : <MdKeyboardVoice size={'30'} />}
+                                    {isListening ? <RiUserVoiceFill size={'20'} style={{ marginTop: '4px' }} /> : <MdKeyboardVoice size={'30'} />}
                                 </Box>
                                 <Box style={{ margin: '6px', cursor: 'pointer' }} onClick={handleSendMessage}>
                                     <IoMdSend size={'30'} />

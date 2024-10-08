@@ -31,16 +31,6 @@ app.use('/api/user', userRoutes)
 app.use('/api/chat', chatRoutes)
 app.use('/api/messages', messageRoutes)
 
-console.log("Pokemon")
-console.log("Pokemon")
-console.log("Pokemon")
-console.log("Pokemon")
-console.log("Pokemon")
-console.log("Pokemon")
-console.log("Pokemon")
-console.log("Pokemon")
-console.log("Pokemon")
-
 // ----------------------------deployment--------------------------------------
 
 //     // console.log(__dirname1)
